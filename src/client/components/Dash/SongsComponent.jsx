@@ -7,10 +7,10 @@ class SongsComponent extends Component {
     super(props);
   }
 
-  componentDidMount() {
-    const { fetchSavedSongs } = this.props;
-    fetchSavedSongs();
-  }
+  // componentDidMount() {
+  //   const { fetchSavedSongs } = this.props;
+  //   fetchSavedSongs();
+  // }
 
   render() {
     const {

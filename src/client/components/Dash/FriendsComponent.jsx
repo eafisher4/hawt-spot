@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import FriendQueryDisplay from './FriendQueryDisplay.jsx';
+
 class FriendsComponent extends Component {
   constructor(props) {
     super(props);
@@ -13,10 +15,10 @@ class FriendsComponent extends Component {
     const {
       searchFriends, friendField, friendQueryResults, updateFriendField, savedFriends,
     } = this.props;
-    const songQueryArray = [];
-    // if (songQueryResults.length) {
-    //   songQueryResults.forEach((songQueryResultDetail, i) => songQueryArray.push(<SongQueryDisplay key={i} saveSong={saveSong} songQueryResultDetail={songQueryResultDetail} />));
-    // }
+    const friendQueryArray = [];
+    if (friendQueryResults.length) {
+      friendQueryResults.forEach((friendQueryResultDetail, i) => friendQueryArray.push(<FriendQueryDisplay key={i} saveSong={saveSong} friendQueryResultDetail={friendQueryResultDetail} />));
+    }
     return (
       <div>
         <div className="friends-header-container">
@@ -28,6 +30,7 @@ class FriendsComponent extends Component {
         </div>
         <div className="friends-list">
           <strong>Your Friends:</strong>
+          {friendQueryArray}
         </div>
       </div>
     );

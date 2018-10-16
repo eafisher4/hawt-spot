@@ -31,7 +31,7 @@ class App extends Component {
     // check if cookie exists and if it does, switch the isLoggedIn to true
     fetch('/users/session')
       .then(data => data.json())
-      .then(data => {
+      .then((data) => {
         this.successfulLogin();
         console.log(data);
       })
