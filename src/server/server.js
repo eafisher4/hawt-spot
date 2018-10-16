@@ -1,6 +1,11 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const path = require('path');
+const cookieParser = require('cookie-parser');
+
+
+// require statements
+const client = require('./db');
 
 // Import router for /users requests
 const users = require('./routes/users');
@@ -10,12 +15,16 @@ const songsController = require('./controllers/songsController.js');
 
 const app = express();
 
+// uses cookie Parser
+app.use(cookieParser());
+
+
 // Configuration - Access dotenv for PORT
 require('dotenv').config();
 
 // Body parser middleware
-// app.use(bodyParser.urlencoded({ extended: false }));
-// ADD PASSPORT HERE
+//app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(bodyParser.json());
 
 app.post('/get-songs',

@@ -4,6 +4,10 @@ const express = require('express');
 const passwordController = require('../controllers/passwordController.js');
 const userController = require('../controllers/userController.js');
 
+// Import middleware for Cookie Setup and Authentication
+const cookieController = require('../controllers/cookieController.js');
+const sessionController = require('../controllers/sessionController.js');
+
 // Invoke Router to create router object for /users
 const router = express.Router();
 
@@ -22,7 +26,9 @@ router.get('/test', (req, res) => {
 // Retrieve User from DB 'users' table by e-mail address
 router.post('/findAccount',
   userController.verifyUser,
-  (req, res) => res.json({ userVerification: res.locals.userVerification, userEmail: res.locals.userEmail }));
+  cookieController.setSSIDCookie,
+  sessionController.startSession,
+  (req, res) => res.json({ userVerification: res.locals.userVerification }));
 
 // Save song to DB 'user_saved_songs' table
 router.post('/save-song',
@@ -47,6 +53,8 @@ router.post('/find-saved-songs',
 router.post('/register',
   passwordController.hashPassword,
   userController.addUser,
+  cookieController.setSSIDCookie,
+  sessionController.startSession,
   (req, res) => res.status(200).json({ message: 'Welcome to HawtSpot!' }));
 
 /**
@@ -58,7 +66,20 @@ router.post('/register',
 router.post('/login',
   // userController.getUser,
   passwordController.comparePassword,
-  (req, res) => res.status(200).json({}));
+  cookieController.setSSIDCookie,
+  sessionController.startSession,
+  (req, res) => {
+    console.log(res.locals.cookieId)
+    res.status(200).json({});
+  });
+
+/**
+ * Check if User Cookie exists and if it matches with the session ID
+ */
+router.get('/session',
+  // need to create a cookie controller that checks current cookie
+  sessionController.isLoggedIn,
+  (req, res) => res.json({}));
 
 router.delete('/',
   userController.deleteUser,
