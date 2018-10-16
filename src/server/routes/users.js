@@ -22,7 +22,7 @@ router.get('/test', (req, res) => {
 // Retrieve User from DB 'users' table by e-mail address
 router.post('/findAccount',
   userController.verifyUser,
-  (req, res) => res.json({ userVerification: res.locals.userVerification }));
+  (req, res) => res.json({ userVerification: res.locals.userVerification, userEmail: res.locals.userEmail }));
 
 // Save song to DB 'user_saved_songs' table
 router.post('/save-song',
@@ -63,5 +63,9 @@ router.post('/login',
 router.delete('/',
   userController.deleteUser,
   (req, res) => res.status(200).json(res.locals));
+
+router.post('/get-friends',
+  userController.getFriends,
+  (req, res) => res.status(200).json(res.locals.friends));
 
 module.exports = router;

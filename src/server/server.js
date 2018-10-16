@@ -14,8 +14,8 @@ const app = express();
 require('dotenv').config();
 
 // Body parser middleware
-//app.use(bodyParser.urlencoded({ extended: false }));
-//ADD PASSPORT HERE
+// app.use(bodyParser.urlencoded({ extended: false }));
+// ADD PASSPORT HERE
 app.use(bodyParser.json());
 
 app.post('/get-songs',
