@@ -26,6 +26,7 @@ module.exports = {
         return res.status(500).json({ message: 'Error: Could Not Save Information', error: queryErr });
       }
       // Todo - add variable to local storage
+      res.locals.userEmail = email;
       return next();
     });
   },
@@ -98,7 +99,7 @@ module.exports = {
       }
       const userSavedSongs = [];
       for (let i = 0; i < queryResponse.rows.length; i += 1) {
-        console.log(queryResponse.rows[i]);
+        // console.log(queryResponse.rows[i]);
         userSavedSongs.push(queryResponse.rows[i]);
       }
       res.locals.userSongs = userSavedSongs;
