@@ -64,7 +64,7 @@ class Register extends Component {
       .then(res => res.json())
       .then((verification) => {
         if (verification.userVerification) {
-          this.props.successfulLogin(verification.userId);
+          this.props.successfulLogin(verification.userEmail);
         } else {
           alert('incorrect email or password');
         }
