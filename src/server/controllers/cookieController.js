@@ -6,11 +6,11 @@ cookieController.setSSIDCookie = setSSIDCookie;
 
 // creating the function that sets the cookie
 function setSSIDCookie(req, res, next) {
-  const { accountEmail } = req.body;
-  console.log('email----->', accountEmail);
+  const { userEmail } = res.locals;
+  console.log('email----->', userEmail);
 
   // gets the email that was just generated and sets cookie for that email
-  client.query('SELECT * from users WHERE "email"=$1', [accountEmail], (err, user) => {
+  client.query('SELECT * from users WHERE "email"=$1', [userEmail], (err, user) => {
     console.log('USER --------->', user);
     res.locals.cookieId = user.rows[0].email;
     console.log('user.email ------>', user.rows[0].email);

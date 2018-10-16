@@ -28,7 +28,7 @@ router.post('/findAccount',
   userController.verifyUser,
   cookieController.setSSIDCookie,
   sessionController.startSession,
-  (req, res) => res.json({ userVerification: res.locals.userVerification }));
+  (req, res) => res.json({ userVerification: res.locals.userVerification, userEmail: res.locals.userEmail }));
 
 // Save song to DB 'user_saved_songs' table
 router.post('/save-song',
@@ -39,7 +39,7 @@ router.post('/save-song',
 router.post('/find-saved-songs',
   userController.findUserSongs,
   (req, res) => {
-    console.log(res.locals.userSongs);
+    // console.log(res.locals.userSongs);
     res.json(res.locals.userSongs);
   });
 
@@ -63,15 +63,15 @@ router.post('/register',
  * @desc    Login User
  * @access  Public
  */
-router.post('/login',
-  // userController.getUser,
-  passwordController.comparePassword,
-  cookieController.setSSIDCookie,
-  sessionController.startSession,
-  (req, res) => {
-    console.log(res.locals.cookieId)
-    res.status(200).json({});
-  });
+// router.post('/login',
+//   // userController.getUser,
+//   passwordController.comparePassword,
+//   cookieController.setSSIDCookie,
+//   sessionController.startSession,
+//   (req, res) => {
+//     console.log(res.locals.cookieId)
+//     res.status(200).json({});
+//   });
 
 /**
  * Check if User Cookie exists and if it matches with the session ID
@@ -79,7 +79,7 @@ router.post('/login',
 router.get('/session',
   // need to create a cookie controller that checks current cookie
   sessionController.isLoggedIn,
-  (req, res) => res.json({}));
+  (req, res) => res.json(res.locals.email));
 
 router.delete('/',
   userController.deleteUser,

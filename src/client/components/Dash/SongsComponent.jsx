@@ -7,10 +7,10 @@ class SongsComponent extends Component {
     super(props);
   }
 
-  componentDidMount() {
-    const { fetchSavedSongs } = this.props;
-    fetchSavedSongs();
-  }
+  // componentDidMount() {
+  //   const { fetchSavedSongs } = this.props;
+  //   fetchSavedSongs();
+  // }
 
   render() {
     const {
@@ -21,7 +21,7 @@ class SongsComponent extends Component {
       songQueryResults.forEach((songQueryResultDetail, i) => songQueryArray.push(<SongQueryDisplay key={i} saveSong={saveSong} songQueryResultDetail={songQueryResultDetail} />));
     }
     const songList = [];
-    console.log(savedSongs);
+    // console.log(savedSongs);
     if (savedSongs.length) {
       savedSongs.forEach((savedSongDetail, i) => songList.push(<SongQueryDisplay key={i} savedSongDetail={savedSongDetail} />));
     }

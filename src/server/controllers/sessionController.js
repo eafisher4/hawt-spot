@@ -8,8 +8,8 @@ sessionController.isLoggedIn = (req, res, next) => {
   // write code here
   const cookieId = req.cookies.ssid;
   client.query('SELECT * FROM sessions WHERE ssid = $1', [cookieId], (err, result) => {
-    console.log(result);
     if (result.rows.length !== 0) {
+      res.locals.email = cookieId;
       return next();
     } else {
       console.log(err);
