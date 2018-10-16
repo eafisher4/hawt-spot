@@ -61,13 +61,10 @@ class Register extends Component {
       headers: { 'Content-Type': 'application/json; charset=utf-8' },
       body: JSON.stringify(logIn),
     })
-      .then((res) => {
-        return res.json();
-      })
+      .then(res => res.json())
       .then((verification) => {
         if (verification.userVerification) {
-          this.props.successfulLogin();
-
+          this.props.successfulLogin(verification.userId);
         } else {
           alert('incorrect email or password');
         }
