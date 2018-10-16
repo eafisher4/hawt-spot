@@ -22,6 +22,17 @@ class App extends Component {
     this.updateSongField = this.updateSongField.bind(this);
   }
 
+  componentDidMount() {
+    // check if cookie exists and if it does, switch the isLoggedIn to true
+    fetch('/users/session')
+      .then(data => data.json())
+      .then(data => {
+        this.successfulLogin();
+        console.log(data);
+      })
+      .catch(err => console.error(err));
+  }
+
   fetchSavedSongs() {
     const { loggedInUser } = this.state;
     fetch('/users/find-saved-songs', {
@@ -86,6 +97,7 @@ class App extends Component {
   updateSongField(event) {
     this.setState({ songField: event.target.value });
   }
+
 
   render() {
     // Destructuring variables from state for rendering logic
