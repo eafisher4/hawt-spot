@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-//import Login from './components/Auth/Login';
+// import Login from './components/Auth/Login';
 import Register from './components/Auth/Register.jsx';
 import Dashboard from './components/Dash/Dashboard.jsx';
 
@@ -9,10 +9,13 @@ class App extends Component {
     super();
     this.state = {
       isLoggedIn: false,
-      loggedInUser: '',
+      loggedInUser: 'vartanov.s@gmail.com',
       songField: '',
       songQueryResults: [],
       savedSongs: [],
+      friendField: '',
+      friendQueryResults: [],
+      savedFriends: [],
     };
     this.fetchSavedSongs = this.fetchSavedSongs.bind(this);
     this.saveSong = this.saveSong.bind(this);
@@ -20,6 +23,8 @@ class App extends Component {
     this.searchSongs = this.searchSongs.bind(this);
     this.updateLoggedInUser = this.updateLoggedInUser.bind(this);
     this.updateSongField = this.updateSongField.bind(this);
+    this.searchFriends = this.searchFriends.bind(this);
+    this.updateFriendField = this.updateFriendField.bind(this);
   }
 
   componentDidMount() {
@@ -35,15 +40,31 @@ class App extends Component {
 
   fetchSavedSongs() {
     const { loggedInUser } = this.state;
+    console.log(this.state);
     fetch('/users/find-saved-songs', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
       },
-      body: JSON.stringify({ username: loggedInUser }),
+      body: JSON.stringify({ username: 'vartanov.s@gmail.com' }),
     })
       .then(data => data.json())
-      .then(data => console.log(data))
+      .then((data) => { console.log(data); this.setState({ savedSongs: data }); })
+      .catch(err => console.error(err));
+  }
+
+  fetchSavedSongs() {
+    const { loggedInUser } = this.state;
+    console.log(this.state);
+    fetch('/users/find-saved-songs', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      body: JSON.stringify({ username: 'vartanov.s@gmail.com' }),
+    })
+      .then(data => data.json())
+      .then((data) => { console.log(data); this.setState({ savedSongs: data }); })
       .catch(err => console.error(err));
   }
 
@@ -86,27 +107,50 @@ class App extends Component {
       .catch(err => console.error(err));
   }
 
-  successfulLogin() {
-    this.setState({ ...this.state, isLoggedIn: true });
+  searchFriends() {
+    const { friendField } = this.state;
+    console.log(friendField);
+    fetch('/users/get-friends', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      body: JSON.stringify({ friendName: friendField }),
+    })
+      .then(data => data.json())
+      .then(data => this.setState({
+        friendQueryResults: data,
+        friendField: '',
+      }))
+      .catch(err => console.error(err));
+  }
+
+  successfulLogin(email) {
+    this.setState({ ...this.state, isLoggedIn: true, loggedInUser: email });
   }
 
   updateLoggedInUser(firstName) {
-    this.setState({ ...this.state, loggedInUser: firstName })
+    this.setState({ ...this.state, loggedInUser: firstName });
   }
 
   updateSongField(event) {
     this.setState({ songField: event.target.value });
   }
 
+  updateFriendField(event) {
+    this.setState({ friendField: event.target.value });
+  }
 
   render() {
     // Destructuring variables from state for rendering logic
-    const { isLoggedIn, loggedInUser, songField, songQueryResults } = this.state;
+    const {
+      isLoggedIn, loggedInUser, songField, songQueryResults, savedSongs, friendField, friendQueryResults, savedFriends,
+    } = this.state;
     // If !isLoggedIn, render Register component, passing in updateLoggedInUser successfulLogin handlers
     let renderComponent = <Register updateLoggedInUser={this.updateLoggedInUser} successfulLogin={this.successfulLogin} />;
     if (isLoggedIn) {
       // If user is logged in, render Dashboard component, passing it saveSong, searchSongs and updateSongFields handlers
-      renderComponent = <Dashboard loggedInUser={loggedInUser} saveSong={this.saveSong} searchSongs={this.searchSongs} songField={songField} songQueryResults={songQueryResults} updateSongField={this.updateSongField} />;
+      renderComponent = <Dashboard loggedInUser={loggedInUser} saveSong={this.saveSong} searchSongs={this.searchSongs} songField={songField} songQueryResults={songQueryResults} updateSongField={this.updateSongField} fetchSavedSongs={this.fetchSavedSongs} savedSongs={savedSongs} searchFriends={this.searchFriends} friendField={friendField} friendQueryResults={friendQueryResults} updateFriendField={this.updateFriendField} fetchSavedFriends={this.fetchSavedFriends} savedFriends={savedFriends} />;
     }
     return (
       <div>

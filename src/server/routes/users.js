@@ -85,4 +85,8 @@ router.delete('/',
   userController.deleteUser,
   (req, res) => res.status(200).json(res.locals));
 
+router.post('/get-friends',
+  userController.getFriends,
+  (req, res) => res.status(200).json(res.locals.friends));
+
 module.exports = router;
