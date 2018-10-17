@@ -43,6 +43,14 @@ router.post('/find-saved-songs',
     res.json(res.locals.userSongs);
   });
 
+// Retrieve all friend objects from DB 'friends' table for e-mail address
+router.post('/find-saved-friends',
+  userController.findUserFriends,
+  (req, res) => {
+    // console.log(res.locals.userSongs);
+    res.json(res.locals.userFriends);
+  });
+
 
 /**
  * Register User to DB 'users' table
@@ -88,5 +96,10 @@ router.delete('/',
 router.post('/get-friends',
   userController.getFriends,
   (req, res) => res.status(200).json(res.locals.friends));
+
+// Save friend to DB 'friends' table
+router.post('/save-friend',
+  userController.saveFriend,
+  (req, res) => res.json({ message: 'save successful' }));
 
 module.exports = router;

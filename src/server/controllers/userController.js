@@ -109,7 +109,7 @@ module.exports = {
 
   getFriends: (req, res, next) => {
     const { friendName } = req.body;
-    const queryText = `SELECT * FROM users WHERE "email" like '%${friendName}%';`;
+    const queryText = `SELECT * FROM users WHERE "email" ILIKE '%${friendName}%' OR "first_name" ILIKE '%${friendName}%' OR "last_name" ILIKE '%${friendName}%';`;
     console.log(queryText);
     client.query(queryText, (queryErr, queryResponse) => {
       if (queryErr) {
@@ -121,6 +121,45 @@ module.exports = {
         friends.push(queryResponse.rows[i]);
       }
       res.locals.friends = friends;
+      return next();
+    });
+  },
+
+  saveFriend: (req, res, next) => {
+    // Pull out the user information from req.body.
+    const { friendId } = req.body;
+    const { userId } = req.cookies;
+    // Create query text.
+    const queryText = 'INSERT INTO friends ("user_id", "friend_id") VALUES ($1, $2);';
+    // Create query array from user info.
+    const queryValue = [
+      parseInt(userId, 10),
+      friendId,
+    ];
+    // Save the friend information into psql table by using query text and query array.
+    client.query(queryText, queryValue, (queryErr, queryResponse) => {
+      if (queryErr) {
+        console.log(queryErr);
+        return res.status(500).json({ message: 'Error: friend query', error: queryErr });
+      }
+      return next();
+    });
+  },
+
+  findUserFriends: (req, res, next) => {
+    const { userId } = req.cookies;
+    const queryText = `SELECT * FROM friends JOIN users ON friend_id = users.user_id LEFT JOIN user_saved_songs ON users.email = user_saved_songs.user WHERE friends.user_id=${userId};`;
+    const queryValue = [userId];
+    client.query(queryText, (queryErr, queryResponse) => {
+      if (queryErr) {
+        return res.status(500).json({ message: 'Error: Problem Verifying User ', error: queryErr });
+      }
+      const userSavedFriends = [];
+      for (let i = 0; i < queryResponse.rows.length; i += 1) {
+        // console.log(queryResponse.rows[i]);
+        userSavedFriends.push(queryResponse.rows[i]);
+      }
+      res.locals.userFriends = userSavedFriends;
       return next();
     });
   },

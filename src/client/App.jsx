@@ -16,6 +16,7 @@ class App extends Component {
       friendField: '',
       friendQueryResults: [],
       savedFriends: [],
+      showFriendsSavedSongs: [],
     };
     this.fetchSavedSongs = this.fetchSavedSongs.bind(this);
     this.saveSong = this.saveSong.bind(this);
@@ -25,19 +26,17 @@ class App extends Component {
     this.updateSongField = this.updateSongField.bind(this);
     this.searchFriends = this.searchFriends.bind(this);
     this.updateFriendField = this.updateFriendField.bind(this);
+    this.saveFriend = this.saveFriend.bind(this);
+    this.cancelSearchSongs = this.cancelSearchSongs.bind(this);
+    this.cancelSearchFriends = this.cancelSearchFriends.bind(this);
+    this.toggleFriendsSavedSongsDisplay = this.toggleFriendsSavedSongsDisplay.bind(this);
   }
 
   componentDidMount() {
     // check if cookie exists and if it does, switch the isLoggedIn to true
     fetch('/users/session')
       .then(data => data.json())
-<<<<<<< HEAD
       .then((data) => {
-        this.successfulLogin();
-=======
-      .then(data => {
->>>>>>> master
-        console.log(data);
         this.successfulLogin(data);
         this.fetchSavedSongs();
       })
@@ -46,7 +45,6 @@ class App extends Component {
 
   fetchSavedSongs() {
     const { loggedInUser } = this.state;
-    console.log('Logged in User ===========>', loggedInUser);
 
     fetch('/users/find-saved-songs', {
       method: 'POST',
@@ -60,21 +58,30 @@ class App extends Component {
       .catch(err => console.error(err));
   }
 
-  // is this a duplicate method?
-  // fetchSavedSongs() {
-  //   const { loggedInUser } = this.state;
-  //   console.log(this.state);
-  //   fetch('/users/find-saved-songs', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json; charset=utf-8',
-  //     },
-  //     body: JSON.stringify({ username: 'vartanov.s@gmail.com' }),
-  //   })
-  //     .then(data => data.json())
-  //     .then((data) => { console.log(data); this.setState({ savedSongs: data }); })
-  //     .catch(err => console.error(err));
-  // }
+  fetchSavedFriends() {
+    const { loggedInUser } = this.state;
+
+    fetch('/users/find-saved-friends', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      body: JSON.stringify({ username: loggedInUser }),
+    })
+      .then(data => data.json())
+      .then((savedFriends) => {
+        let lastSavedFriendDetail = null;
+        let count = 0;
+        for (let i = 0; i < savedFriends.length; i += 1) {
+          if (lastSavedFriendDetail !== null && savedFriends[i].email !== lastSavedFriendDetail.email) {
+            count += 1;
+          }
+          lastSavedFriendDetail = savedFriends[i];
+        }
+        this.setState({ savedFriends, friendsSavedSongsDisplay: Array(count).fill(false) });
+      })
+      .catch(err => console.error(err));
+  }
 
   saveSong(title, artist, album, url) {
     const { loggedInUser } = this.state;
@@ -85,7 +92,6 @@ class App extends Component {
       album,
       url,
     };
-    // console.log(songData);
     fetch('/users/save-song', {
       method: 'POST',
       headers: {
@@ -95,6 +101,22 @@ class App extends Component {
     })
       .then(data => this.setState({ songQueryResults: [] }))
       .then(data => this.fetchSavedSongs())
+      .catch(err => console.error(err));
+  }
+
+  saveFriend(friendId) {
+    const friendData = {
+      friendId,
+    };
+    fetch('/users/save-friend', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      body: JSON.stringify(friendData),
+    })
+      .then(data => this.setState({ friendQueryResults: [] }))
+      .then(data => this.fetchSavedFriends())
       .catch(err => console.error(err));
   }
 
@@ -117,7 +139,6 @@ class App extends Component {
 
   searchFriends() {
     const { friendField } = this.state;
-    // console.log(friendField);
     fetch('/users/get-friends', {
       method: 'POST',
       headers: {
@@ -134,9 +155,9 @@ class App extends Component {
   }
 
   successfulLogin(email) {
-    console.log(email);
     this.setState({ ...this.state, isLoggedIn: true, loggedInUser: email });
     this.fetchSavedSongs();
+    this.fetchSavedFriends();
   }
 
   updateLoggedInUser(firstName) {
@@ -151,37 +172,57 @@ class App extends Component {
     this.setState({ friendField: event.target.value });
   }
 
+  cancelSearchSongs() {
+    this.setState({ songQueryResults: [] });
+  }
+
+  cancelSearchFriends() {
+    this.setState({ friendQueryResults: [] });
+  }
+
+  toggleFriendsSavedSongsDisplay(index) {
+    const { showFriendsSavedSongs } = this.state;
+    showFriendsSavedSongs[index] = !showFriendsSavedSongs[index];
+    this.setState({ showFriendsSavedSongs });
+  }
+
   render() {
-    
     // Destructuring variables from state for rendering logic
     const {
-      isLoggedIn, loggedInUser, songField, songQueryResults, savedSongs, friendField, friendQueryResults, savedFriends,
+      isLoggedIn, loggedInUser, songField, songQueryResults, savedSongs, friendField, friendQueryResults, savedFriends, showFriendsSavedSongs,
     } = this.state;
     // If !isLoggedIn, render Register component, passing in updateLoggedInUser successfulLogin handlers
-    let renderComponent = 
-      <Register 
-        updateLoggedInUser={this.updateLoggedInUser} 
-        successfulLogin={this.successfulLogin} 
-      />;
+    let renderComponent = (
+      <Register
+        updateLoggedInUser={this.updateLoggedInUser}
+        successfulLogin={this.successfulLogin}
+      />
+    );
     if (isLoggedIn) {
       // If user is logged in, render Dashboard component, passing it saveSong, searchSongs and updateSongFields handlers
-      renderComponent = 
-        <Dashboard 
-          loggedInUser={loggedInUser} 
-          saveSong={this.saveSong} 
-          searchSongs={this.searchSongs} 
-          songField={songField} 
-          songQueryResults={songQueryResults} 
-          updateSongField={this.updateSongField} 
-          fetchSavedSongs={this.fetchSavedSongs} 
-          savedSongs={savedSongs} 
-          searchFriends={this.searchFriends} 
-          friendField={friendField} 
-          friendQueryResults={friendQueryResults} 
-          updateFriendField={this.updateFriendField} 
-          fetchSavedFriends={this.fetchSavedFriends} 
-          savedFriends={savedFriends} 
-        />;
+      renderComponent = (
+        <Dashboard
+          loggedInUser={loggedInUser}
+          saveSong={this.saveSong}
+          searchSongs={this.searchSongs}
+          songField={songField}
+          songQueryResults={songQueryResults}
+          updateSongField={this.updateSongField}
+          fetchSavedSongs={this.fetchSavedSongs}
+          savedSongs={savedSongs}
+          saveFriend={this.saveFriend}
+          searchFriends={this.searchFriends}
+          friendField={friendField}
+          friendQueryResults={friendQueryResults}
+          updateFriendField={this.updateFriendField}
+          fetchSavedFriends={this.fetchSavedFriends}
+          savedFriends={savedFriends}
+          cancelSearchSongs={this.cancelSearchSongs}
+          cancelSearchFriends={this.cancelSearchFriends}
+          toggleFriendsSavedSongsDisplay={this.toggleFriendsSavedSongsDisplay}
+          showFriendsSavedSongs={showFriendsSavedSongs}
+        />
+      );
     }
     return (
       <div>
