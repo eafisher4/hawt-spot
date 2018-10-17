@@ -11,9 +11,8 @@ sessionController.isLoggedIn = (req, res, next) => {
     if (result.rows.length !== 0) {
       res.locals.email = cookieId;
       return next();
-    } else {
-      console.log(err);
     }
+    console.log(err);
   });
 };
 

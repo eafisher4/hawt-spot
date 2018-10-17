@@ -14,7 +14,7 @@ class SongsComponent extends Component {
 
   render() {
     const {
-      saveSong, searchSongs, songField, songQueryResults, updateSongField, savedSongs,
+      saveSong, searchSongs, songField, songQueryResults, updateSongField, savedSongs, cancelSearchSongs,
     } = this.props;
     const songQueryArray = [];
     if (songQueryResults.length) {
@@ -36,9 +36,9 @@ class SongsComponent extends Component {
           </div>
         </div>
         <div className="songs-list">
-          <strong>Your Songs:</strong>
-          {songQueryArray}
-          {songList}
+          <strong>Your Songs: </strong>
+          <button onClick={cancelSearchSongs}>Cancel</button>
+          { songQueryArray.length ? songQueryArray : songList}
         </div>
       </div>
     );

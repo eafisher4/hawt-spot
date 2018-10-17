@@ -15,6 +15,7 @@ function setSSIDCookie(req, res, next) {
     res.locals.cookieId = user.rows[0].email;
     console.log('user.email ------>', user.rows[0].email);
     res.cookie('ssid', user.rows[0].email, { httpOnly: true });
+    res.cookie('userId', user.rows[0].user_id, { httpOnly: true });
     return next();
   });
 }
