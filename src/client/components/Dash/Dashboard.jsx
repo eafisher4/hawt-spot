@@ -6,11 +6,14 @@ import FriendsComponent from './FriendsComponent.jsx';
 
 const Dashboard = (props) => {
   const {
-    saveSong, searchSongs, songField, songQueryResults, updateSongField, fetchSavedSongs, savedSongs, saveFriend, searchFriends, friendField, friendQueryResults, updateFriendField, fetchSavedFriends, savedFriends, cancelSearchSongs, cancelSearchFriends, toggleFriendsSavedSongsDisplay, showFriendsSavedSongs,
+    saveSong, searchSongs, songField, songQueryResults, updateSongField, fetchSavedSongs, savedSongs, saveFriend, searchFriends, friendField, friendQueryResults, updateFriendField, fetchSavedFriends, savedFriends, cancelSearchSongs, cancelSearchFriends, toggleFriendsSavedSongsDisplay, showFriendsSavedSongs, logOutUser,
   } = props;
   return (
     <div>
-      <header>HAWT-SPOT DASHBOARD</header>
+      <div className="header-container">
+        <header>HAWT-SPOT DASHBOARD</header>
+        <button className="button-styler" onClick={logOutUser}>Log Out</button>
+      </div>
       <main>
         <SongsComponent saveSong={saveSong} searchSongs={searchSongs} songField={songField} songQueryResults={songQueryResults} updateSongField={updateSongField} fetchSavedSongs={fetchSavedSongs} savedSongs={savedSongs} cancelSearchSongs={cancelSearchSongs} />
         <FriendsComponent saveFriend={saveFriend} searchFriends={searchFriends} songField={friendField} friendQueryResults={friendQueryResults} updateFriendField={updateFriendField} fetchSavedFriends={fetchSavedFriends} savedFriends={savedFriends} cancelSearchFriends={cancelSearchFriends} toggleFriendsSavedSongsDisplay={toggleFriendsSavedSongsDisplay} showFriendsSavedSongs={showFriendsSavedSongs} />

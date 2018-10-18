@@ -30,6 +30,7 @@ class App extends Component {
     this.cancelSearchSongs = this.cancelSearchSongs.bind(this);
     this.cancelSearchFriends = this.cancelSearchFriends.bind(this);
     this.toggleFriendsSavedSongsDisplay = this.toggleFriendsSavedSongsDisplay.bind(this);
+    this.logOutUser = this.logOutUser.bind(this);
   }
 
   componentDidMount() {
@@ -186,6 +187,23 @@ class App extends Component {
     this.setState({ showFriendsSavedSongs });
   }
 
+  logOutUser() {
+    const { loggedInUser } = this.state;
+    fetch('/users/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      body: JSON.stringify({ email: loggedInUser }),
+    })
+      .then(data => data.json())
+      .then(data => this.setState({
+        isLoggedIn: false,
+        loggedInUser: '',
+      }))
+      .catch(err => console.error(err));
+  }
+
   render() {
     // Destructuring variables from state for rendering logic
     const {
@@ -221,6 +239,7 @@ class App extends Component {
           cancelSearchFriends={this.cancelSearchFriends}
           toggleFriendsSavedSongsDisplay={this.toggleFriendsSavedSongsDisplay}
           showFriendsSavedSongs={showFriendsSavedSongs}
+          logOutUser={this.logOutUser}
         />
       );
     }

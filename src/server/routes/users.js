@@ -51,7 +51,6 @@ router.post('/find-saved-friends',
     res.json(res.locals.userFriends);
   });
 
-
 /**
  * Register User to DB 'users' table
  * @route   POST users/register
@@ -102,4 +101,7 @@ router.post('/save-friend',
   userController.saveFriend,
   (req, res) => res.json({ message: 'save successful' }));
 
+router.post('/logout',
+sessionController.endSession,
+(req, res) => res.json({ message: 'logout successful' }));
 module.exports = router;

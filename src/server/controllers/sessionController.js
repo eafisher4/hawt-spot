@@ -31,4 +31,18 @@ sessionController.startSession = (req, res, next) => {
   });
 };
 
+sessionController.endSession = (req, res, next) => {
+  // write code here
+  const { cookieId } = res.locals;
+  console.log('COOKIE ID ----->', cookieId);
+  // create a new session and save the user information into psql table by using query and query array
+  client.query('DELETE FROM sessions WHERE ssid=($1)', [cookieId], (err, queryResponse) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error: Could Not Save Session', error: err });
+    }
+    // Todo - add variable to local storage
+    return next();
+  });
+};
+
 module.exports = sessionController;
