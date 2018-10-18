@@ -8,12 +8,42 @@ const Dashboard = (props) => {
   const {
     saveSong, searchSongs, songField, songQueryResults, updateSongField, fetchSavedSongs, savedSongs, saveFriend, searchFriends, friendField, friendQueryResults, updateFriendField, fetchSavedFriends, savedFriends, cancelSearchSongs, cancelSearchFriends, toggleFriendsSavedSongsDisplay, showFriendsSavedSongs,
   } = props;
+
   return (
     <div>
-      <header>HAWT-SPOT DASHBOARD</header>
+      <div className="header-container">
+        <header>HAWT-SPOT DASHBOARD</header>
+        <div className="header-right">
+          <button>Recommended</button>
+          <button>Log Out</button>
+        </div>
+      </div>
       <main>
-        <SongsComponent saveSong={saveSong} searchSongs={searchSongs} songField={songField} songQueryResults={songQueryResults} updateSongField={updateSongField} fetchSavedSongs={fetchSavedSongs} savedSongs={savedSongs} cancelSearchSongs={cancelSearchSongs} />
-        <FriendsComponent saveFriend={saveFriend} searchFriends={searchFriends} songField={friendField} friendQueryResults={friendQueryResults} updateFriendField={updateFriendField} fetchSavedFriends={fetchSavedFriends} savedFriends={savedFriends} cancelSearchFriends={cancelSearchFriends} toggleFriendsSavedSongsDisplay={toggleFriendsSavedSongsDisplay} showFriendsSavedSongs={showFriendsSavedSongs} />
+        {/* Renders the Songs on the left side */}
+        <SongsComponent 
+          saveSong={saveSong} 
+          searchSongs={searchSongs} 
+          songField={songField} 
+          songQueryResults={songQueryResults} 
+          updateSongField={updateSongField} 
+          fetchSavedSongs={fetchSavedSongs} 
+          savedSongs={savedSongs} 
+          savedFriends={savedFriends}
+          cancelSearchSongs={cancelSearchSongs} 
+        />
+        {/* Renders the Friends list on the right side */}
+        <FriendsComponent 
+          saveFriend={saveFriend} 
+          searchFriends={searchFriends} 
+          songField={friendField} 
+          friendQueryResults={friendQueryResults} 
+          updateFriendField={updateFriendField} 
+          fetchSavedFriends={fetchSavedFriends} 
+          savedFriends={savedFriends} 
+          cancelSearchFriends={cancelSearchFriends} 
+          toggleFriendsSavedSongsDisplay={toggleFriendsSavedSongsDisplay} 
+          showFriendsSavedSongs={showFriendsSavedSongs} 
+        />
       </main>
     </div>
   );

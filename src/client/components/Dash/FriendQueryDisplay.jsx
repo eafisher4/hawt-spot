@@ -10,6 +10,7 @@ const FriendQueryDisplay = (props) => {
   } = props;
   const songList = [];
   // console.log(savedSongs);
+  // console.log(props.saveSong);
   if (friendSongList !== undefined && friendSongList.length) {
     friendSongList.forEach((savedSongDetail, i) => songList.push(<SongQueryDisplay key={i} savedSongDetail={savedSongDetail} />));
   }
