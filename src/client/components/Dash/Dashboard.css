@@ -135,6 +135,7 @@ main {
   font-weight: bold;
   line-height: 20px;
 }
+<<<<<<< HEAD
 
 .header-container {
   display: flex;
@@ -150,3 +151,5 @@ main {
   height: 72px;
   border-radius: 4px;
 }
+=======
+>>>>>>> 56476487f22df2bdab254da7d48fda413330b27c

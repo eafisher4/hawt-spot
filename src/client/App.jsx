@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-// import Login from './components/Auth/Login';
 import Register from './components/Auth/Register.jsx';
 import Dashboard from './components/Dash/Dashboard.jsx';
-
 
 class App extends Component {
   constructor() {
@@ -209,15 +207,17 @@ class App extends Component {
     const {
       isLoggedIn, loggedInUser, songField, songQueryResults, savedSongs, friendField, friendQueryResults, savedFriends, showFriendsSavedSongs,
     } = this.state;
-    // If !isLoggedIn, render Register component, passing in updateLoggedInUser successfulLogin handlers
+
+    // If user is NOT logged in, render Register component
     let renderComponent = (
       <Register
         updateLoggedInUser={this.updateLoggedInUser}
         successfulLogin={this.successfulLogin}
       />
     );
+    
+    // If user is logged in, render Dashboard component
     if (isLoggedIn) {
-      // If user is logged in, render Dashboard component, passing it saveSong, searchSongs and updateSongFields handlers
       renderComponent = (
         <Dashboard
           loggedInUser={loggedInUser}
@@ -243,6 +243,7 @@ class App extends Component {
         />
       );
     }
+
     return (
       <div>
         {renderComponent}
