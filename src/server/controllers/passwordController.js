@@ -27,7 +27,7 @@ module.exports = {
   comparePassword: (req, res, next) => {
     // Retrieve user input clear password from req.body
     const { password } = req.body;
-    // TODO: Retrieve hashed passwrod from user database
+    // TODO: Retrieve hashed password from user database
     const { hashPass } = ''; // TODO:
     // bCrypt compare clear password to hashed password, continue if approved
     bcrypt.compare(password, hashPass)

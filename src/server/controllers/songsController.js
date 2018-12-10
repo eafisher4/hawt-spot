@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const qs = require('qs');
 
+
 // Access dotenv for Spotify token
 require('dotenv').config();
 
@@ -54,7 +55,7 @@ module.exports = {
       newSong.title = obj.name;
       newSong.artist = obj.artists[0].name;
       newSong.album = obj.album.name;
-      newSong.url = obj.external_urls.spotify
+      newSong.url = obj.external_urls.spotify;
       songArr.push(newSong);
     })
     res.locals.songArr = songArr;

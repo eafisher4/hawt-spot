@@ -19,6 +19,7 @@ const FriendQueryDisplay = (props) => {
     <div>
       <div className="song-query-container">
         <div className="song-query-button-container">
+          <button className="song-query-button" onClick={() => saveFriend(user_id)}>Add Friend</button>
           <button className="song-query-button" onClick={() => toggleFriendsSavedSongsDisplay(index)}>Show</button>
         </div>
         <div className="song-query-detail">
