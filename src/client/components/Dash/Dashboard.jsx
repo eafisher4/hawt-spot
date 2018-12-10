@@ -15,8 +15,6 @@ const Dashboard = (props) => {
         <header>HAWT-SPOT DASHBOARD</header>
         <button className="button-styler" onClick={logOutUser}>Log Out</button>
         <div className="header-right">
-          <button>Recommended</button>
-          <button>Log Out</button>
         </div>
       </div>
       <main>
